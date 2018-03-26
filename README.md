@@ -21,7 +21,7 @@ docker run -it --rm --name oe117-ws -p 5162:5162/udp -p 20931:20931 -p 3055:3055
 ### Run the container with a mapped volume
 
 ```bash
-docker run -it --rm --name oe117-ws -p 3055:3055 -p 3202-3502:3202-3502 -v D:/workspaces/docker-volumes/webspeed:/var/lib/openedge/code -v D:/workspaces/docker-volumes/webspeed/logs:/usr/wrk oe117-ws:latest
+docker run -it --rm --name oe117-ws -p 3055:3055 -p 3202-3388:3202-3388 -p 3390-3502:3390-3502 -v S:/workspaces/docker-volumes/webspeed:/var/lib/openedge/code -v S:/workspaces/docker-volumes/webspeed/logs:/usr/wrk oe117-ws:latest
 ```
 
 ### Run bash in the container

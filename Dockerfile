@@ -52,7 +52,7 @@ ENV \
  WEBSPEED_MINPORT="3202" \
  WEBSPEED_MAXPORT="3502" \
  ADMINSERVER_PORT="20932" \
- WEBSPEED_STARTUP="-p web/objects/web_disp.p -weblogerror" \
+ WEBSPEED_STARTUP="-p web/objects/web-disp.p -weblogerror" \
  PROPATH="/var/lib/openedge/base/:/var/lib/openedge/code/"
 
 # volume for application code
