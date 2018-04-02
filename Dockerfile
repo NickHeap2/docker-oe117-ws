@@ -50,6 +50,9 @@ ENV \
  ADMINSERVER_PORT="20931" \
  WEBSPEED_STARTUP="-p web/objects/web-disp.p -weblogerror" \
  PROPATH="/var/lib/openedge/base/:/var/lib/openedge/code/" \
+ WEBSPEED_INITIAL_AGENTS="1" \
+ WEBSPEED_MIN_AGENTS="1" \
+ WEBSPEED_MAX_AGENTS="2" \
  LOGGING_LEVEL="2" \
  LOG_ENTRY_TYPES="DB.Connects"
 
