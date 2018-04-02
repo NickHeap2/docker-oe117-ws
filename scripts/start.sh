@@ -19,22 +19,22 @@ signal_handler() {
 # trap SIGTERM and call the handler to cleanup processes
 trap 'kill ${!}; signal_handler' SIGTERM SIGINT
 
-# replace the tags in the template file into ubroker.properties
-#sed  's|<WEBSPEED_PORT>|'"${WEBSPEED_PORT}"'|;s|<WEBSPEED_SERVICE>|'"${WEBSPEED_SERVICE}"'|;s|<WEBSPEED_MINPORT>|'"${WEBSPEED_MINPORT}"'|;s|<WEBSPEED_MAXPORT>|'"${WEBSPEED_MAXPORT}"'|;s|<WEBSPEED_STARTUP>|'"${WEBSPEED_STARTUP}"'|;s|<PROPATH>|'"${PROPATH}"'|' /usr/dlc/properties/template.ubroker.properties > /usr/dlc/properties/ubroker.properties
-sed  "s|<WEBSPEED_PORT>|${WEBSPEED_PORT}|;s|<WEBSPEED_SERVICE>|${WEBSPEED_SERVICE}|;s|<WEBSPEED_MINPORT>|${WEBSPEED_MINPORT}|;s|<WEBSPEED_MAXPORT>|${WEBSPEED_MAXPORT}|;s|<WEBSPEED_STARTUP>|${WEBSPEED_STARTUP}|;s|<PROPATH>|${PROPATH}|;s|<NAMESERVER_PORT>|${NAMESERVER_PORT}|" /usr/dlc/properties/template.ubroker.properties > /usr/dlc/properties/ubroker.properties
+# replace values in ubroker.properties file
+sed  "s|3055|${WEBSPEED_PORT}|g;s|wsbroker1|${WEBSPEED_SERVICE}|g;s|3202|${WEBSPEED_MINPORT}|g;s|3502|${WEBSPEED_MAXPORT}|g;s|-p web\/objects\/web-disp.p -weblogerror|${WEBSPEED_STARTUP}|g;s|PROPATH=\${PROPATH}:\${WRKDIR}|PROPATH=${PROPATH}|g;s|5162|${NAMESERVER_PORT}|g;s|srvrLoggingLevel=2|srvrLoggingLevel=${LOGGING_LEVEL}|g;s|srvrLogEntryTypes=|srvrLogEntryTypes=${LOG_ENTRY_TYPES}|g;s|workDir=\$WRKDIR|workDir=\/var\/lib\/openedge\/code\/|g;s|initialSrvrInstance=5|initialSrvrInstance=1|g;s|maxSrvrInstance=10|maxSrvrInstance=2|g" /usr/dlc/properties/ubroker.properties > /usr/dlc/properties/ubroker.properties.new
+mv /usr/dlc/properties/ubroker.properties.new /usr/dlc/properties/ubroker.properties
 
 # first start the admin server
 echo "Starting admin server"
-proadsv -port 20932 -start
+proadsv -port ${ADMINSERVER_PORT} -start
 
 # let the nameserver auto start with the admin server
 # then the nameserver NS1
 #echo "Starting name server NS1"
-#nsman -start -name NS1
+#nsman -port ${ADMINSERVER_PORT} -start -name NS1
 
-# next start asbroker1
-echo "Starting webspeed wsbroker1"
-wtbman -port 20932 -start -name wsbroker1
+# next start webspeed broker
+echo "Starting webspeed ${WEBSPEED_SERVICE}"
+wtbman -port ${ADMINSERVER_PORT} -start -name ${WEBSPEED_SERVICE}
 
 # get appserver pid 
 pid=`ps aux|grep '[I]D=WebSpeed'|awk '{print $2}'`
@@ -46,7 +46,7 @@ fi
 echo "Webspeed running as pid: ${pid}"
 
 # keep tailing log file until webspeed process exits
-tail --pid=${pid} -f wsbroker1.server.log & wait ${!}
+tail --pid=${pid} -f /usr/wrk/${WEBSPEED_SERVICE}.server.log & wait ${!}
 
 # things didn't go well
 exit 1

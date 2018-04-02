@@ -28,13 +28,9 @@ COPY --from=as_install /usr/dlc/ /usr/dlc/
 
 # the directories for the appserver code
 RUN mkdir -p /var/lib/openedge/base/ && mkdir -p /var/lib/openedge/code/
-COPY base/ws_ping.r /var/lib/openedge/base/
-#COPY base/as_activate.r /var/lib/openedge/base/
-
-COPY conf/*.properties /usr/dlc/properties/
 
 # add startup script
-WORKDIR /usr/wrk
+WORKDIR /var/lib/openedge/code/
 
 COPY scripts/ /var/lib/openedge/
 
@@ -51,15 +47,17 @@ ENV \
  WEBSPEED_SERVICE="wsbroker1" \
  WEBSPEED_MINPORT="3202" \
  WEBSPEED_MAXPORT="3502" \
- ADMINSERVER_PORT="20932" \
+ ADMINSERVER_PORT="20931" \
  WEBSPEED_STARTUP="-p web/objects/web-disp.p -weblogerror" \
- PROPATH="/var/lib/openedge/base/:/var/lib/openedge/code/"
+ PROPATH="/var/lib/openedge/base/:/var/lib/openedge/code/" \
+ LOGGING_LEVEL="2" \
+ LOG_ENTRY_TYPES="DB.Connects"
 
 # volume for application code
 VOLUME /var/lib/openedge/code/
 VOLUME /usr/wrk/
 
-EXPOSE $ADMINSERVER_PORT $NAMESERVER_PORT/udp $WEBSPEED_PORT $WEBSPEED_MINPORT-$WEBSPEED_MINPORT
+EXPOSE 20931 5162/udp 3055 3202-3502
 
 # Run start.sh under Tini
 CMD ["/var/lib/openedge/start.sh"]
