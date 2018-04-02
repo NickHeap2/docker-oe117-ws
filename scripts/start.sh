@@ -20,7 +20,7 @@ signal_handler() {
 trap 'kill ${!}; signal_handler' SIGTERM SIGINT
 
 # replace values in ubroker.properties file
-sed  "s|3055|${WEBSPEED_PORT}|g;s|wsbroker1|${WEBSPEED_SERVICE}|g;s|3202|${WEBSPEED_MINPORT}|g;s|3502|${WEBSPEED_MAXPORT}|g;s|-p web\/objects\/web-disp.p -weblogerror|${WEBSPEED_STARTUP}|g;s|PROPATH=\${PROPATH}:\${WRKDIR}|PROPATH=${PROPATH}|g;s|5162|${NAMESERVER_PORT}|g;s|srvrLoggingLevel=2|srvrLoggingLevel=${LOGGING_LEVEL}|g;s|srvrLogEntryTypes=|srvrLogEntryTypes=${LOG_ENTRY_TYPES}|g;s|workDir=\$WRKDIR|workDir=\/var\/lib\/openedge\/code\/|g;s|initialSrvrInstance=5|initialSrvrInstance=1|g;s|maxSrvrInstance=10|maxSrvrInstance=2|g" /usr/dlc/properties/ubroker.properties > /usr/dlc/properties/ubroker.properties.new
+sed  "s|3055|${WEBSPEED_PORT}|g;s|wsbroker1|${WEBSPEED_SERVICE}|g;s|3202|${WEBSPEED_MINPORT}|g;s|3502|${WEBSPEED_MAXPORT}|g;s|-p web\/objects\/web-disp.p -weblogerror|${WEBSPEED_STARTUP}|g;s|PROPATH=\${PROPATH}:\${WRKDIR}|PROPATH=${PROPATH}|g;s|5162|${NAMESERVER_PORT}|g;s|srvrLoggingLevel=2|srvrLoggingLevel=${LOGGING_LEVEL}|g;s|srvrLogEntryTypes=DB.Connects|srvrLogEntryTypes=${LOG_ENTRY_TYPES}|g;s|workDir=\$WRKDIR|workDir=\/var\/lib\/openedge\/code\/|g;s|initialSrvrInstance=5|initialSrvrInstance=1|g;s|maxSrvrInstance=10|maxSrvrInstance=2|g" /usr/dlc/properties/ubroker.properties > /usr/dlc/properties/ubroker.properties.new
 mv /usr/dlc/properties/ubroker.properties.new /usr/dlc/properties/ubroker.properties
 
 # first start the admin server
