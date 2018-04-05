@@ -7,9 +7,14 @@ COPY conf/response.ini /install/openedge/
 #do a background progress install with our response.ini
 RUN /install/openedge/proinst -b /install/openedge/response.ini -l silentinstall.log
 
+# add in which & zip utility
+RUN yum install -y\
+  which \
+  zip 
+
 ###############################################
 
-# actual db server image
+# actual ws server image
 FROM centos:7.3.1611
 
 LABEL maintainer="Nick Heap (nickheap@gmail.com)" \
@@ -25,6 +30,8 @@ ENTRYPOINT ["/tini", "--"]
 
 # copy openedge files in
 COPY --from=as_install /usr/dlc/ /usr/dlc/
+COPY --from=as_install /usr/bin/which /usr/bin/
+COPY --from=as_install /usr/bin/zip /usr/bin/
 
 # the directories for the appserver code
 RUN mkdir -p /var/lib/openedge/base/ && mkdir -p /var/lib/openedge/code/
@@ -42,7 +49,9 @@ ENV \
  DLC="/usr/dlc" \
  WRKDIR="/usr/wrk" \
  PROCFG="" \
+ NAMESERVER_HOST="localhost" \ 
  NAMESERVER_PORT="5162" \
+ NAMESERVER_NAME="NS1" \ 
  WEBSPEED_PORT="3055" \
  WEBSPEED_SERVICE="wsbroker1" \
  WEBSPEED_MINPORT="3202" \
