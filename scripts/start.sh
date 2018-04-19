@@ -36,13 +36,35 @@ proadsv -port ${ADMINSERVER_PORT} -start
 echo "Starting webspeed ${WEBSPEED_SERVICE}"
 wtbman -port ${ADMINSERVER_PORT} -start -name ${WEBSPEED_SERVICE}
 
-# get appserver pid 
-pid=`ps aux|grep '[I]D=WebSpeed'|awk '{print $2}'`
+# get webspeed pid 
+echo "Waiting for webspeed to start..."
+
+RETRIES=0
+while true
+do
+  if [ "${RETRIES}" -gt 10 ]
+  then
+    break
+  fi
+
+  pid=`ps aux|grep '[I]D=WebSpeed'|awk '{print $2}'`
+  if [ ! -z "${pid}" ]
+  then
+    case "${pid}" in
+      ''|*[!0-9]*) continue ;;
+      *) break ;;
+    esac
+  fi
+  sleep 1
+  RETRIES=$((RETRIES+1))
+done
+# did we get the pid?
 if [ -z "${pid}" ]
 then
-  echo "ERROR: Webspeed failed to start!"
+  echo "$(date +%F_%T) ERROR: Webspeed process not found exiting."
   exit 1
 fi
+
 echo "Webspeed running as pid: ${pid}"
 
 # keep tailing log file until webspeed process exits
