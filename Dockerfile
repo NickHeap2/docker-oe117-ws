@@ -69,7 +69,7 @@ ENV \
 VOLUME /var/lib/openedge/code/
 VOLUME /usr/wrk/
 
-EXPOSE 20931 5162/udp 3055 3202-3502
+EXPOSE $ADMINSERVER_PORT $NAMESERVER_PORT/udp $WEBSPEED_PORT $WEBSPEED_MINPORT-$WEBSPEED_MAXPORT
 
 # Run start.sh under Tini
 CMD ["/var/lib/openedge/start.sh"]

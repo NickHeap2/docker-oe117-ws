@@ -109,7 +109,7 @@ fi
 echo "Webspeed running as pid: ${pid}"
 
 # keep tailing log file until webspeed process exits
-tail --pid=${pid} -f /usr/wrk/${WEBSPEED_SERVICE}.server.log & wait ${!}
+tail --pid=${pid} -f NS1.ns.log admserv.log /usr/wrk/${WEBSPEED_SERVICE}.server.log & wait ${!}
 
 # things didn't go well
 exit 1
